@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="./img/1.jpg" alt="">
+    <script>
+
+        const w = window.innerWidth,
+            h = window.innerHeight,
+            img = document.querySelector('img')
+
+        // resize();
+        img.onload = function () {
+            let canvas = document.createElement('canvas');
+            canvas.style.position = 'absolute';
+            canvas.style.left = img.offsetLeft + 'px';
+            canvas.style.top = img.offsetTop + 'px';
+            canvas.width = img.width;
+            canvas.height = img.height;
+            img.parentNode.insertBefore(canvas, img);
+            let c = canvas.getContext('2d');
+            c.fillStyle = '#bbb';
+            c.fillRect(0, 0, w, h)
+ 
+            
+            canvas.onmousedown = function (e) {
+                let x = e.pageX,
+                    y = e.pageY;
+                c.beginPath();
+                c.fillStyle = '#000';
+                c.arc(x, y, 50, 0, 2 * Math.PI)
+                c.fill();
+                
+                c.globalCompositeOperation = 'destination-out'
+                c.lineCap = 'round'
+                c.lineW = 100;
+
+                this.onmousemove = function (e) {
+                    c.beginPath();
+                    c.moveTo(x, y);
+                    c.lineTo(e.pageX, e.pageY)
+                    c.stroke()
+                    c.beginPath();
+                    // c.fill()
+                    // x = e.pageX;
+                    // y = e.pageY;
+                    // c.arc(x,y, 50, 0, 2 * Math.PI)
+                    // c.fill();
+
+                }
+                this.onmouseup = function () {
+                    this.onmousemove = null;
+                    this.onmouseup = null;
+                }
+            }
+
+
+
+        }
+        // function resize() {
+        //     canvas.width = window.innerWidth;
+        //     canvas.height = window.innerHeight;
+        //     c.clearRect(0, 0, w, h);
+        //     c.beginPath();
+        //     c.fillStyle = '#bbb';
+        //     c.fillRect(0, 0, window.innerWidth, window.innerHeight)
+        // }
+        // window.onresize = resize;
+
+    </script>
+</body>
+
+</html>
