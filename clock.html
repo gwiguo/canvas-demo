@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>时钟</title>
+    <style>
+        body,
+        html {
+            overflow: hidden;
+            margin: 0;
+            background-color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas></canvas>
+    <script>
+        const canvas = document.querySelector("canvas");
+        const c = canvas.getContext("2d");
+        let cW,cH;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        cW = canvas.width / 2,
+        cH = canvas.height / 2;
+
+        c.lineWidth = 17; // 针的宽度
+        c.strokeStyle = '#0ff'; // 针颜色
+
+
+        fn()
+        function fn() {
+
+            c.clearRect(0, 0, 500, 500) //清楚所有区域重新绘制
+
+            // 背景渐变 
+            const color = c.createRadialGradient(cW, cH, 5, cW, cH, 300);
+            color.addColorStop(0, '#03303a');
+            color.addColorStop(1, '#000')
+            c.fillStyle = color;
+            c.fillRect(0, 0, canvas.width, canvas.height);
+
+            const now = new Date();
+            const today = now.toDateString(); //第一行显示的
+            const time = now.toLocaleTimeString(); // 第二行显示的
+            const hou = now.getHours();
+            const min = now.getMinutes();
+            const sec = now.getSeconds();
+            const ms = sec + (now.getMilliseconds() / 1000); //毫秒
+            const start = 270 * Math.PI / 180; //默认是从0也就是右边开始绘制，而时针分钟秒针一开始都是在270这个地方开始绘制的
+
+            //时钟 最外层 
+            c.beginPath();
+            c.arc(cW, cH, 240, start, ((30 * hou) - 90) * Math.PI / 180);
+            c.stroke();
+
+            //分钟 第二层
+            c.beginPath();
+            c.arc(cW, cH, 210, start, ((6 * min) - 90) * Math.PI / 180)
+            c.stroke();
+
+            //秒钟 最里层
+            c.beginPath();
+            c.arc(cW, cH, 180, start, ((6 * ms) - 90) * Math.PI / 180)
+            c.stroke();
+
+
+            c.beginPath();
+            c.font = '25px 微软雅黑';
+            c.fillStyle = '#0ff';
+            c.fillText(today, cW - 100, cH - 30)
+            c.fillText(`${time}:${now.getMilliseconds()}`, cW - 100, cH + 20)
+
+            c.shadowBlur = 20;
+            c.shadowColor = '#0ff';
+            requestAnimationFrame(fn)
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>望远镜</title>
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0;
+            background-image: url('./img/2.jpg');
+            background-size: 500px 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas></canvas>
+    <script>
+        const canvas = document.querySelector("canvas");
+        const c = canvas.getContext("2d");
+
+        const W = canvas.width = window.innerWidth;
+        const H = canvas.height = window.innerHeight;
+
+        // drag({})
+        function drag({clientX=W/2,clientY=H/2}) {
+            c.save()
+            c.clearRect(0, 0, W, H);
+            c.fillRect(0, 0, W, H)
+            c.globalCompositeOperation = 'destination-out';
+            const rg = c.createRadialGradient(clientX,clientY,0,clientX,clientY,200)
+            rg.addColorStop(0,'rgba(0,0,0,1)')
+            rg.addColorStop(0.7,'rgba(0,0,0,1)')
+            rg.addColorStop(1,'rgba(0,0,0,0)')
+            c.beginPath();
+            c.fillStyle = rg;
+            c.arc(clientX, clientY, 200, 0, 2 * Math.PI)
+            c.fill()
+            c.restore()
+        }
+
+        canvas.addEventListener('mousemove', drag, false)
+
+    </script>
+</body>
+
+</html>
